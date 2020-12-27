@@ -37,11 +37,6 @@ unsigned bitstream::get_occupied_bytes()
 }
 bool bitstream::add_remainder(unsigned data, unsigned size)
 {
-    //notice no checks. Yea, I don't care if remainder overflows
-    //because EVERY pack() has to if if(pack() > 0)d and flushed
-    //then reset.
-    //At least for now, that is. maybe I can code a lock mechanism
-    //in place later
     remainder_size += size;
     remainder = (remainder << size) | data & ~(0xffu << (size));
     return true;
@@ -49,7 +44,7 @@ bool bitstream::add_remainder(unsigned data, unsigned size)
 int bitstream::micropack(byte data, unsigned size)
 {
     if (!size)
-        return 0; //needed for adding remainders w/pack(,)
+        return 0;
 
     if (get_free_bits() >= size)
     {
@@ -61,7 +56,7 @@ int bitstream::micropack(byte data, unsigned size)
         buffer[get_byte_pos()] = buff;     //flush the change
         buffer[get_byte_pos() + 1] = data; //flush the change
         bit_pos += size;
-        return 0; //no problems, sire.
+        return 0; 
     }
     else
     {

@@ -57,16 +57,15 @@ input_param parse_options(unsigned char argc, char *argv[])
 
         //return the parsed options
         options.invalid = false;
-        // if (!options.encode && options.output_file == "a.huff")
-        //     options.output_file = "a.dhuff";
-        // return options;
+        if (!options.encode && options.output_file == "a.huff")
+            options.output_file = "a.dhuff";
+        return options;
     }
 }
 
 bool show_help_if_option_invalid(input_param options)
 {
-    //   cout<<options.input_file<<"vv";
-    //   cout<<options.input_file_size;
+   
     if (options.invalid)
     {
         print_help();

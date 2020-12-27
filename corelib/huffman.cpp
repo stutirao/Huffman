@@ -1,14 +1,11 @@
 #include <iostream> //for debug only
 // #include "../debughelpers/bit_printer.h"
 #include <fstream>
-#include <bitset>
-#include <iomanip> 
-#include <ios> 
+
 #include "huffman.h"
 #include "tree.h"
 #include "priority_queue.h"
 #include "bitstream.h"
-#include <sys/stat.h>
 
 using namespace std;
 
@@ -77,8 +74,11 @@ priority_queue<tree::node> *generate_alphabets(unsigned *count)
     priority_queue<tree::node> *q = new priority_queue<tree::node>;
     for (int i = 0; i < 256; i++)
     {
+        if(count[i]>0)
+        {
         tree::node x(i, count[i], NULL, NULL);
         q->enqueue(x);
+        }
     }
     return q;
 }
@@ -173,6 +173,7 @@ int write_huff_header(ofstream &out, huffman_code *table, unsigned *count)
         {
             out.put(i);
             out.put(table[i].get_size());
+            cout<<char(i)<<" "<<table[i].get_code()<<endl;
             out.put((char)(table[i].get_code() >> 24));
             out.put((char)(table[i].get_code() >> 16));
             out.put((char)(table[i].get_code() >> 8));
@@ -190,43 +191,40 @@ int write_huff_header(ofstream &out, huffman_code *table, unsigned *count)
 }
 
 int encode_file(huffman_code *table, input_param options)
+//seems like there is a bug here, not in decoding
 {
     ifstream in;
     ofstream out;
     in.open(options.input_file, ios::binary | ios::in);
-    out.open(options.output_file, ios::binary | ios::out );
+    out.open(options.output_file, ios::binary | ios::out);
     unsigned char a;
     const int BIT_SIZE = 1024 * 1024;
     bitstream coded_buffer(BIT_SIZE);
     unsigned long no_of_huff_bits = 0;
-  
+
     if (!options.generate_code)
     {
         unsigned *count = count_frequency(in, options.input_file_size); //TODO : pass count pointer around in parameter, instead
         //of this foolishness
         write_huff_header(out, table, count);
     }
-  
+
     for (unsigned long i = 0; i < options.input_file_size; i++)
     {
         a = in.get();
-        
         no_of_huff_bits += table[a].get_size();
-        
         if (!coded_buffer.pack(table[a].get_code(), table[a].get_size()))
         {
-            if (options.verbose)
-                cout << setw(3) << (int)(((double)i / (double)options.input_file_size) * 100)
-                     << "% compressed\r" << flush;
+            // if (options.verbose)
+            //     cout << setw(3) << (int)(((double)i / (double)options.input_file_size) * 100)
+            //          << "% compressed\r" << flush;
 
             out.write((const char *)coded_buffer.flush_buffer(), BIT_SIZE);
-            
             coded_buffer.reset_buffer();
         }
     }
-   
     out.write((const char *)coded_buffer.flush_buffer(), coded_buffer.get_occupied_bytes());
-   
+
     if (options.verbose)
         cout << "100% compressed" << endl;
 
