@@ -1,3 +1,2 @@
 # Huffman
-HEY THERE
-mnfvb,sdsewmnnwjeff
+File compression and decompression using Huffman Coding
