@@ -4,7 +4,7 @@
 
 #include "param_parser.h"
 #include "help.h"
-#include "corelib/huffman.h"
+#include "mainlib/huffman.h"
 // #include "debughelpers/tree_printer.h"
 // #include "debughelpers/bit_printer.h"
 
@@ -46,14 +46,6 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		if (options.generate_code)
-		{
-			huffman_code *huff_code = reconstruct_code_from_ascii();
-			if (options.verbose)
-				cout << "Decoding with naive_decode implementation." << endl;
-			naive_decode(huff_code, options);
-		}
-		else
 		{
 			naive_decode_with_header(options);
 		}

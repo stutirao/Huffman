@@ -84,14 +84,13 @@ int naive_decode_with_header(input_param options)
     for (unsigned long i = in.tellg(); i < options.input_file_size; i++)
     {
         buffer = in.get();
-        cout<<char(buffer)<<endl;
+       
         for (int j = 0; j < 8; j++)
         {
-            cout<<code<<" ";
+            
             code = (code << 1) | pluck_bit(buffer);
             code_size++;
             buffer = buffer << 1;
-            cout<<code<<endl;
             for (int k = 0; k < 256; k++)
             {
                 if (code == huff_code[k].get_code() && code_size == huff_code[k].get_size())

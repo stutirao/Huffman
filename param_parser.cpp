@@ -24,15 +24,8 @@ input_param parse_options(unsigned char argc, char *argv[])
             }
             else if (argv[i] == string("-d") || argv[i] == string("--decode"))
                 options.encode = false;
-            else if (argv[i] == string("-t") | argv[i] == string("--table")) //debug use
-                options.generate_table = true;
             else if (argv[i] == string("-v") || argv[i] == string("--verbose"))
                 options.verbose = true;
-            else if (argv[i] == string("-c") || argv[i] == string("--code_only"))
-            {
-                options.verbose = false;
-                options.generate_code = true;
-            }
             else
             {
                 options.input_file = argv[i];

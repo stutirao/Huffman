@@ -3,7 +3,8 @@
         "param.C": "cpp",
         "main.C": "cpp",
         "help.C": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     }
     
 }
