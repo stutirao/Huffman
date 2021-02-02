@@ -173,7 +173,7 @@ int write_huff_header(ofstream &out, huffman_code *table, unsigned *count)
         {
             out.put(i);
             out.put(table[i].get_size());
-            cout<<char(i)<<" "<<table[i].get_code()<<endl;
+            // cout<<char(i)<<" "<<table[i].get_code()<<endl;
             out.put((char)(table[i].get_code() >> 24));
             out.put((char)(table[i].get_code() >> 16));
             out.put((char)(table[i].get_code() >> 8));
